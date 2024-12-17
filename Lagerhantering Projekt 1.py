@@ -99,22 +99,32 @@ def main():  # Huvudfunktion för att köra programmet
         show_menu()  # Visar huvudmenyn
         choice = input("Ditt val: ").strip()  # Hämtar användarens val
 
-        if choice == 'V':  # Visa alla produkter
+        if choice == 'V'.lower():  # Visa alla produkter
             os.system('cls' if os.name == 'nt' else 'clear')
             print(view_products(products))
             input("\nTryck Enter för att återvända till menyn.")
 
-        elif choice == 'L':  # Lägg till produkt
+        elif choice == 'L'.lower():  # Lägg till produkt
             os.system('cls' if os.name == 'nt' else 'clear')
+            print(view_products(products))
             name = input(Fore.MAGENTA + "Namn på produkt: ")
             desc = input("Beskrivning: ")
-            price = float(input("Pris: "))
-            quantity = int(input("Antal: "))
+            try:
+                    price = float(input("Pris: "))
+                    return price
+            except ValueError:
+                        print("Ogiltig inmatning. Vänligen ange ett giltigt nummer.")
+            try:
+                    quantity = int(input("Antal: "))
+                    return quantity
+            except ValueError:
+                        print("Ogiltig inmatning. Vänligen ange ett giltigt nummer.")
             print(add_product(products, name, desc, price, quantity))
             sleep(1)  # Fördröjning innan återgång till menyn
 
-        elif choice == 'Ä':  # Ändra produkt
+        elif choice == 'Ä'.lower():  # Ändra produkt
             os.system('cls' if os.name == 'nt' else 'clear')
+            print(view_products(products))
             id = int(input("Ange produktens ID som du vill ändra: "))
             product = next((p for p in products if p['id'] == id), None)  # Hitta produkt med matchande ID
             if product:
@@ -128,15 +138,16 @@ def main():  # Huvudfunktion för att köra programmet
                 print(Fore.RED + "Produkten med detta ID finns inte.")
             sleep(1)
 
-        elif choice == 'T':  # Ta bort produkt
+        elif choice == 'T'.lower():  # Ta bort produkt
             os.system('cls' if os.name == 'nt' else 'clear')
+            print(view_products(products))
             id = int(input("Ange produktens ID som du vill ta bort: "))
             print(remove_product(products, id))
             sleep(1)
 
-        elif choice == 'A':  # Avsluta programmet
+        elif choice == 'A'.lower():  # Avsluta programmet
             os.system('cls' if os.name == 'nt' else 'clear')
-            # Spara ändringar till CSV
+            # Spara ändringar till CSV 
             with open('db_products.csv', mode='w', newline='') as file:
                 writer = csv.DictWriter(file, fieldnames=["id", "name", "desc", "price", "quantity"])
                 writer.writeheader()  # Skriver rubrikerna till CSV-filen
